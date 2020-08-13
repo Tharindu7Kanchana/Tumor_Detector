@@ -1,16 +1,18 @@
-picture1 = imread('brain6.jpg');
+picture1 = imread('brain4.jpg');
 
 picture2Bw = im2bw(picture1 , 0.7);
 
-subplot(1,2,1), imshow(picture2Bw);
+figure , imshow(picture1);
+
 [label , num] = bwlabel(picture2Bw);
 
 status = regionprops(label , 'Solidity' , 'Area');
 density = [status.Solidity];
 area = [status.Area];
 
-
 high_dense_area = density > 0.5;
+
+disp(high_dense_area);
 
 max_area = max(area(high_dense_area));
 
@@ -21,10 +23,11 @@ tumor = ismember(label , tumor_label);
 SE = strel('square' , 5);
 tumor = imdilate(tumor , SE);
 
-bound = bwboundaries(tumor , 'noholes');
+%bound = bwboundaries(tumor , 'noholes');
 imshow(picture1);
 
-finalPicture1 = edge(tumor);
+%finalPicture1 = edge(tumor);
+finalPicture1 = tumor;
 
 [r1 , c1] = find(finalPicture1);
 
@@ -39,7 +42,7 @@ heigth = y2 - y1;
 
 if width > 11
     if(heigth > 11)
-        subplot(1,2,2) , imshow(tumor);
+        figure , imshow(tumor);
     end
 end
     
