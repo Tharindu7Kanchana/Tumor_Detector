@@ -158,7 +158,7 @@ f = findobj('Tag','choose_file');
 brain = f.UserData;
 scrsz = get(groot,'ScreenSize');
 figure('Position',[1 scrsz(4)/2 scrsz(3)/2 scrsz(4)/2],'OuterPosition',[100 150 5*scrsz(3)/6 500],'Name','Analyzed Results','NumberTitle','off','MenuBar','none','ToolBar','figure','CloseRequestFcn',@my_closereq);
-subplot(1, 3, 1);
+subplot(1, 4, 1);
 imshow(brain, []);
 axis on;
 caption = sprintf('Original Image');
@@ -166,15 +166,16 @@ title(caption, 'FontSize', 18, 'Interpreter', 'None');
 drawnow;
 
 
-brain=im2bw(brain);
-hy = fspecial('laplacian');
+brain=im2bw(brain,graythresh(brain));
+hy = fspecial('log');
 hx = hy';
 Iy = imfilter(double(brain), hy, 'replicate');
 Ix = imfilter(double(brain), hx, 'replicate');
 gradmag = sqrt(Ix.^2 + Iy.^2);
-subplot(1,3,2)
+subplot(1,4,2)
 imshow(gradmag,[]), title('Gradient magnitude (gradmag)')
-
+subplot(1,4,3)
+imshow(imcontour(imread('brain21.jpg')))
 [label , num] = bwlabel(gradmag);
 
 status = regionprops(label , 'Solidity' , 'Area');
@@ -207,9 +208,9 @@ y1 = min(c1);
 
 width = x2 - x1;
 heigth = y2 - y1;
-
+subplot(1,4,4) , imshow(tumor);
 if width > 11
     if(heigth > 11)
-        subplot(1,3,3) , imshow(tumor);
+        
     end
 end
