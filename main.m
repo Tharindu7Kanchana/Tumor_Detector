@@ -158,7 +158,7 @@ f = findobj('Tag','choose_file');
 brain = f.UserData;
 scrsz = get(groot,'ScreenSize');
 figure('Position',[1 scrsz(4)/2 scrsz(3)/2 scrsz(4)/2],'OuterPosition',[100 150 5*scrsz(3)/6 500],'Name','Analyzed Results','NumberTitle','off','MenuBar','none','ToolBar','figure','CloseRequestFcn',@my_closereq);
-subplot(1, 4, 1);
+subplot(1, 3, 1);
 imshow(brain, []);
 axis on;
 caption = sprintf('Original Image');
@@ -174,8 +174,8 @@ hx = hy';
 Iy = imfilter(double(brain), hy, 'replicate');
 Ix = imfilter(double(brain), hx, 'replicate');
 gradmag = sqrt(Ix.^2 + Iy.^2);
-subplot(1,4,2)
-imshow(gradmag,[]), title('Gradient magnitude (gradmag)')
+subplot(1,3,2)
+imshow(gradmag,[]), title('Gradient magnitude (gradmag)');
 
 picture1 = brain1;
 %picture1 = imread('brain4.jpg');
