@@ -219,8 +219,6 @@ finalPicture1 = tumor;
 
 %% mark a bondary to the tumor with red
 
-
-
 [r1 , c1] = find(finalPicture1);
 
 x2 = max(r1);
