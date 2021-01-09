@@ -165,20 +165,29 @@ caption = sprintf('Original Image');
 title(caption, 'FontSize', 18, 'Interpreter', 'None');
 drawnow;
 
-brain1 = brain;
+if length(size(brain)) == 3
+    brain1 = rgb2gray(brain);
+else
+    brain1 = brain;
+end
 
 
-brain=im2bw(brain,graythresh(brain));
-hy = fspecial('log');
+
+%%
+brain=im2bw(brain);
+brain = medfilt2(brain);
+hy = fspecial('laplacian');
 hx = hy';
 Iy = imfilter(double(brain), hy, 'replicate');
 Ix = imfilter(double(brain), hx, 'replicate');
 gradmag = sqrt(Ix.^2 + Iy.^2);
 subplot(1,3,2)
-imshow(gradmag,[]), title('Gradient magnitude (gradmag)');
+imshow(gradmag,[]), title('Gradient magnitude (gradmag)')
 
 picture1 = brain1;
 %picture1 = imread('brain4.jpg');
+%%
+
 picture2Bw = im2bw(picture1 , 0.7);
 
 [label , num] = bwlabel(picture2Bw);
@@ -187,7 +196,7 @@ status = regionprops(label , 'Solidity' , 'Area');
 density = [status.Solidity];
 area = [status.Area];
 
-high_dense_area = density > 0.7;
+high_dense_area = density > 0.4;
 
 disp(high_dense_area);
 
@@ -207,6 +216,11 @@ tumor = imdilate(tumor , SE);
 %finalPicture1 = edge(tumor);
 finalPicture1 = tumor;
 
+
+%% mark a bondary to the tumor with red
+
+
+
 [r1 , c1] = find(finalPicture1);
 
 x2 = max(r1);
@@ -221,39 +235,12 @@ heigth = y2 - y1;
 
 if width > 11
     if(heigth > 11)
-        subplot(1,3,3),imshow(tumor , []) , title('final');
+        %subplot(1,3,3),imshow(tumor , []) , title('final');
+        [B , L] = bwboundaries(tumor , 'noholes');
+        subplot(1,3,3) , imshow(brain1 , []) , title('Final');
+        hold on
+        for i = 1:length(B)
+            plot(B{1}(:,2) , B{1}(:,1) , 'R' , 'linewidth' , 1.45);
+        end
     end
 end
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
