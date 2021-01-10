@@ -135,6 +135,21 @@ function Untitled_3_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+function mydialog(msg,title)
+    d = dialog('Position',[300 300 250 150],'Name',title);
+
+    txt = uicontrol('Parent',d,...
+               'Style','text',...
+               'Position',[20 80 210 40],...
+               'String',msg,...
+               'FontSize',12,'FontWeight','bold');
+
+    btn = uicontrol('Parent',d,...
+               'Position',[85 20 70 25],...
+               'String','Close',...
+               'Callback','delete(gcf)');
+
+    
 function my_closereq(src,callbackdata)
 % Close request function 
 % to display a question dialog box 
@@ -234,11 +249,18 @@ heigth = y2 - y1;
 if width > 11
     if(heigth > 11)
         %subplot(1,3,3),imshow(tumor , []) , title('final');
-        [B , L] = bwboundaries(tumor , 'noholes');
+        [B,L,N,A] = bwboundaries(tumor , 'noholes');
         subplot(1,3,3) , imshow(brain1 , []) , title('Final');
         hold on
         for i = 1:length(B)
             plot(B{1}(:,2) , B{1}(:,1) , 'R' , 'linewidth' , 1.45);
         end
     end
+end
+
+%%
+if N > 0
+    mydialog('A Tumor has been Detected','RESULTS');
+else
+    mydialog('Scan is seems to be Negative','RESULTS');
 end
